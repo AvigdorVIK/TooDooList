@@ -1,6 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
 type Task struct {
 	Name string
@@ -39,34 +45,47 @@ func (tl *TodoList) ShowTask() {
 
 func main() {
 	todoList := TodoList{}
-	fmt.Println("1. Add task")
-	fmt.Println("2. Complete task")
-	fmt.Println("3. Print tasks")
-	fmt.Println("0. Exit")
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Println("1. Add task")
+		fmt.Println("2. Complete task")
+		fmt.Println("3. Print tasks")
+		fmt.Println("0. Exit")
 
-	var choise int
-	fmt.Println("yor choise:")
-	fmt.Scan(&choise)
+		//var choise int
+		//fmt.Println("yor choise:")
+		//fmt.Scan(&choise)
+		var choise int
+		fmt.Print("Enter your choice: ")
+		input, _ := reader.ReadString('\n')
+		input = strings.TrimSpace(input)
 
-	switch choise {
-	case 0:
-		fmt.Println("...")
-		return
-	case 1:
-		fmt.Print("Enter task name: ")
-		var name string
-		fmt.Scanln(&name)
-		todoList.AddTask(name)
-	case 2:
-		fmt.Print("Enter task index: ")
-		var index int
-		fmt.Scanln(&index)
-		todoList.CompletTask(index - 1)
-	case 3:
-		todoList.ShowTask()
-	default:
-		fmt.Println("Invalid choice")
+		choise, err := strconv.Atoi(input)
+		if err != nil {
+			fmt.Println("Invalid choice")
+			continue
+		}
+
+		switch choise {
+		case 0:
+			fmt.Println("...")
+			return
+		case 1:
+			fmt.Print("Enter task name: ")
+			var name string
+			fmt.Scanln(&name)
+			todoList.AddTask(name)
+		case 2:
+			fmt.Print("Enter task index: ")
+			var index int
+			fmt.Scanln(&index)
+			todoList.CompletTask(index - 1)
+		case 3:
+			todoList.ShowTask()
+		default:
+			fmt.Println("Invalid choice")
+		}
+
+		fmt.Println()
 	}
-
-	fmt.Println()
 }
